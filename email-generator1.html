@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Email Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            margin-right: 10px;
+            width: auto;
+            padding: 10px 24px;
+            font-size: 0.95em;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #output {
+            display: none;
+        }
+
+        .email-output {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .editable-output {
+            background: white;
+            border: 2px solid #667eea;
+            min-height: 300px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .help-section {
+            background: #e8eaf6;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .help-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .help-section ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .preview-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-secondary {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✉️ Professional Email Generator</h1>
+            <p>Create polished, professional emails in seconds</p>
+        </div>
+
+        <div class="card">
+            <div class="help-section">
+                <h3>📝 How to Use This Tool:</h3>
+                <ul>
+                    <li><strong>Step 1:</strong> Choose your email type (Business, Follow-up, Request, etc.)</li>
+                    <li><strong>Step 2:</strong> Select the tone (Formal, Professional, Friendly, or Casual)</li>
+                    <li><strong>Step 3:</strong> Add recipient name and subject (optional)</li>
+                    <li><strong>Step 4:</strong> Describe your purpose - be specific about what you want to say</li>
+                    <li><strong>Step 5:</strong> Click "Generate Email" and edit if needed</li>
+                    <li><strong>Step 6:</strong> Copy to clipboard or download as a text file</li>
+                </ul>
+            </div>
+
+            <div id="input-form">
+                <div class="form-grid">
+                    <div class="form-section">
+                        <label for="emailType">Email Type</label>
+                        <select id="emailType">
+                            <option value="business">Business Inquiry</option>
+                            <option value="follow-up">Follow-up</option>
+                            <option value="request">Request</option>
+                            <option value="thank-you">Thank You</option>
+                            <option value="apology">Apology</option>
+                            <option value="introduction">Introduction</option>
+                            <option value="meeting">Meeting Request</option>
+                            <option value="resignation">Resignation</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section">
+                        <label for="tone">Tone</label>
+                        <select id="tone">
+                            <option value="formal">Formal</option>
+                            <option value="professional">Professional</option>
+                            <option value="friendly">Friendly</option>
+                            <option value="casual">Casual</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label for="recipient">Recipient Name (Optional)</label>
+                    <input type="text" id="recipient" placeholder="e.g., John Smith">
+                </div>
+
+                <div class="form-section">
+                    <label for="subject">Subject Line (Optional)</label>
+                    <input type="text" id="subject" placeholder="e.g., Project Update">
+                </div>
+
+                <div class="form-section">
+                    <label for="purpose">Purpose / Key Points</label>
+                    <textarea id="purpose" placeholder="Describe what you want to communicate in the email..." oninput="updateCharCount()"></textarea>
+                    <div class="char-count" id="charCount">0 characters</div>
+                </div>
+
+                <div class="form-section">
+                    <label for="senderName">Your Name (Optional)</label>
+                    <input type="text" id="senderName" placeholder="e.g., Jane Doe">
+                </div>
+
+                <button class="btn" onclick="generateEmail()">Generate Email</button>
+            </div>
+
+            <div id="output">
+                <div class="success-message" id="successMsg">✓ Email generated successfully!</div>
+                
+                <div class="preview-badge">Generated Email</div>
+                
+                <div class="form-section">
+                    <label>Your Email (Editable - Click to modify)</label>
+                    <textarea class="email-output editable-output" id="emailContent" 
+                              contenteditable="true"></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="copyEmail()">📋 Copy to Clipboard</button>
+                    <button class="btn-secondary" onclick="downloadEmail()">💾 Download as .txt</button>
+                    <button class="btn" onclick="resetForm()">✨ Generate New Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateCharCount() {
+            const purpose = document.getElementById('purpose').value;
+            const count = purpose.length;
+            document.getElementById('charCount').textContent = `${count} characters`;
+        }
+
+        const emailTemplates = {
+            'business-formal': {
+                greeting: 'Dear',
+                closing: 'Sincerely',
+                intro: 'I am writing to inquire about'
+            },
+            'business-professional': {
+                greeting: 'Hello',
+                closing: 'Best regards',
+                intro: 'I wanted to reach out regarding'
+            },
+            'business-friendly': {
+                greeting: 'Hi',
+                closing: 'Warm regards',
+                intro: 'I hope this email finds you well. I wanted to discuss'
+            },
+            'business-casual': {
+                greeting: 'Hey',
+                closing: 'Thanks',
+                intro: 'I wanted to touch base about'
+            },
+            'follow-up-formal': {
+                greeting: 'Dear',
+                closing: 'Respectfully',
+                intro: 'I am following up on my previous correspondence regarding'
+            },
+            'follow-up-professional': {
+                greeting: 'Hello',
+                closing: 'Best regards',
+                intro: 'I wanted to follow up on'
+            },
+            'request-formal': {
+                greeting: 'Dear',
+                closing: 'Respectfully yours',
+                intro: 'I am writing to formally request'
+            },
+            'thank-you-professional': {
+                greeting: 'Dear',
+                closing: 'With gratitude',
+                intro: 'I wanted to express my sincere thanks for'
+            },
+            'apology-formal': {
+                greeting: 'Dear',
+                closing: 'Sincerely apologetic',
+                intro: 'I am writing to sincerely apologize for'
+            },
+            'introduction-professional': {
+                greeting: 'Hello',
+                closing: 'Looking forward to connecting',
+                intro: 'I would like to introduce myself'
+            },
+            'meeting-professional': {
+                greeting: 'Hello',
+                closing: 'Best regards',
+                intro: 'I would like to schedule a meeting to discuss'
+            },
+            'resignation-formal': {
+                greeting: 'Dear',
+                closing: 'Sincerely',
+                intro: 'I am writing to formally submit my resignation from my position as'
+            }
+        };
+
+        function generateEmail() {
+            const type = document.getElementById('emailType').value;
+            const tone = document.getElementById('tone').value;
+            const recipient = document.getElementById('recipient').value;
+            const subject = document.getElementById('subject').value;
+            const purpose = document.getElementById('purpose').value;
+            const senderName = document.getElementById('senderName').value;
+
+            if (!purpose.trim()) {
+                alert('Please enter the purpose of your email.');
+                return;
+            }
+
+            const templateKey = `${type}-${tone}`;
+            const template = emailTemplates[templateKey] || emailTemplates['business-professional'];
+
+            const recipientName = recipient.trim() || '[Recipient Name]';
+            const subjectLine = subject.trim() || getDefaultSubject(type);
+            const sender = senderName.trim() || '[Your Name]';
+
+            let email = `Subject: ${subjectLine}\n\n`;
+            email += `${template.greeting} ${recipientName},\n\n`;
+            email += `${template.intro} ${purpose.trim()}\n\n`;
+            
+            if (type === 'meeting') {
+                email += `Please let me know your availability for the upcoming week.\n\n`;
+            } else if (type === 'request') {
+                email += `I would greatly appreciate your assistance with this matter.\n\n`;
+            } else if (type === 'thank-you') {
+                email += `Your support has been invaluable.\n\n`;
+            } else if (type === 'apology') {
+                email += `I take full responsibility and will ensure this does not happen again.\n\n`;
+            } else if (type === 'follow-up') {
+                email += `I look forward to your response.\n\n`;
+            }
+
+            email += `${template.closing},\n${sender}`;
+
+            document.getElementById('emailContent').value = email;
+            document.getElementById('input-form').style.display = 'none';
+            document.getElementById('output').style.display = 'block';
+            
+            const successMsg = document.getElementById('successMsg');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+            
+            // Scroll to output
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function getDefaultSubject(type) {
+            const subjects = {
+                'business': 'Business Inquiry',
+                'follow-up': 'Following Up',
+                'request': 'Request for Assistance',
+                'thank-you': 'Thank You',
+                'apology': 'Sincere Apologies',
+                'introduction': 'Introduction',
+                'meeting': 'Meeting Request',
+                'resignation': 'Resignation Notice'
+            };
+            return subjects[type] || 'Professional Correspondence';
+        }
+
+        function copyEmail() {
+            const emailContent = document.getElementById('emailContent').value;
+            navigator.clipboard.writeText(emailContent).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.style.background = '#4caf50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function downloadEmail() {
+            const emailContent = document.getElementById('emailContent').value;
+            const blob = new Blob([emailContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'email.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function resetForm() {
+            document.getElementById('input-form').style.display = 'block';
+            document.getElementById('output').style.display = 'none';
+            document.getElementById('purpose').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('recipient').value = '';
+            document.getElementById('senderName').value = '';
+            updateCharCount();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
